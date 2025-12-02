@@ -1,0 +1,64 @@
+version: '3.8'
+services:
+  mongodb:
+    image: mongo:7
+    ports: ["27017:27017"]
+    volumes: [mongo_data:/data/db]
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports: ["5672:5672", "15672:15672"]
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  frontend:
+    build: ./frontend
+    ports: ["3000:3000"]
+    environment:
+      VITE_API_URL: http://localhost:3001
+    depends_on: [backend]
+
+  backend:
+    build: ./backend
+    ports: ["3001:3001"]
+    environment:
+      DATABASE_URL: ${DATABASE_URL}
+      JWT_SECRET: ${JWT_SECRET}
+      RABBITMQ_URL: ${RABBITMQ_URL}
+    depends_on:
+      mongodb:
+        condition: service_started
+      rabbitmq:
+        condition: service_healthy
+
+  collector:
+    build: ./collector
+    environment:
+      RABBITMQ_URL: ${RABBITMQ_URL}
+      CITY_LAT: ${CITY_LAT}
+      CITY_LON: ${CITY_LON}
+      LOCATION: ${LOCATION}
+      WEATHER_INTERVAL_MINUTES: ${WEATHER_INTERVAL_MINUTES}
+    depends_on: [rabbitmq]
+    restart: unless-stopped
+
+  worker:
+    build: ./worker
+    environment:
+      RABBITMQ_URL: ${RABBITMQ_URL}
+      API_URL: http://backend:3001/api/weather/logs
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+      backend:
+        condition: service_started
+    restart: unless-stopped
+
+volumes:
+  mongo_data:

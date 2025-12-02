@@ -1,0 +1,36 @@
+# Go
+vendor/
+*.exe
+*.exe~
+*.dll
+*.so
+*.so.*
+*.dylib
+
+# Test binaries, built with `go test -c`
+*.test
+
+# Output of go coverage tool
+*.out
+.coverage
+
+# Dependency directories
+go.sum
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Environment
+.env
+.env.local
+
+# Logs
+*.log
