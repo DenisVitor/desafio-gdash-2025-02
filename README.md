@@ -1,82 +1,148 @@
-# Weather Dashboard - Aplicação de Coleta e Visualização de Dados Meteorológicos
+# GDASH Weather Dashboard - Desafio Técnico Completo
 
-## Visão Geral
+## 🚀 Visão Geral
 
-Este projeto é uma aplicação completa para coleta, processamento e visualização de dados meteorológicos. Utiliza:
-- Python para coletar dados de APIs públicas (Open-Meteo), enviando para RabbitMQ
-- Golang para consumir dados da fila e enviar para backend
-- Backend em NestJS com MongoDB para persistência e API segura via JWT
-- Frontend React para dashboard com visualização paginada, gráficos e insights
+Aplicação fullstack completa para monitoramento meteorológico em tempo real com arquitetura distribuída:
 
----
+Python Collector → RabbitMQ → Go Worker → NestJS API → React Dashboard
+↓
+MongoDB (Persistência)
 
-## Pré-requisitos
+**Tecnologias**: Python, Go, NestJS, React (Vite), RabbitMQ, MongoDB, Docker Compose, Recharts
 
-- [Docker e Docker Compose](https://docs.docker.com/compose/install/) instalados
-- Ambiente com porta 3001 livre (backend)
-- Navegador para acessar dashboard React
+## 🛠️ Pré-requisitos
 
----
+- Docker + Docker Compose
+- Portas 3000 (frontend) e 3001 (backend) livres
 
-## Configuração
+## 🎯 Como Rodar (Docker Compose - Recomendado)
 
-1. Crie um arquivo `.env` na raiz do projeto com as variáveis:
+1. Copiar variáveis de ambiente
+cp .env.example .env
 
-2. No arquivo `docker-compose.yml`, as variáveis são referenciadas via `${VARIAVEL}` e serão lidas automaticamente do `.env`.
-
----
-
-## Como rodar a aplicação
-
-No terminal, execute:
-
+2. Editar .env com suas configurações
+CITY_LAT, CITY_LON, JWT_SECRET, etc.
+3. Subir todos os serviços
 docker-compose up --build
 
-Isso vai criar e subir os containers do RabbitMQ, MongoDB, backend, worker e collector.
+**URLs disponíveis:**
+- **Dashboard**: http://localhost:3000
+- **Gerenciar Usuários**: http://localhost:3000/users
+- **API Backend**: http://localhost:3001/api
+- **RabbitMQ Admin**: http://localhost:15672 (guest/guest)
 
-A coleta de dados ocorrerá automaticamente no intervalo configurado (`WEATHER_INTERVAL_MINUTES`).
+## 👤 Usuário Padrão
 
----
+Email: user@example.com
+Senha: password123
 
-## Como usar
+## 📱 Funcionalidades
 
-- Acesse o frontend React em `http://localhost:3000/`
-- Faça login para usar o dashboard
-- Visualize os dados meteorológicos atualizados, gráficos de temperatura e histórico paginado (10 itens por página)
-- Use os botões para exportar dados em CSV ou XLSX
-- O backend expõe APIs REST protegidas por JWT para segurança
+- ✅ Coleta automática de dados meteorológicos (Open-Meteo API)
+- ✅ Pipeline assíncrono via RabbitMQ
+- ✅ Worker Go de alta performance
+- ✅ API REST segura (JWT Authentication)
+- ✅ **CRUD Completo de Usuários** (criar/editar/excluir)
+- ✅ Geração automática de insights IA
+- ✅ Dashboard React responsivo com:
+  - Gráficos de tendência (Recharts)
+  - Tabela paginada (10 itens/página)
+  - Cards de insights coloridos
+  - Export CSV/XLSX
+  - Botão "Gerenciar Usuários" no header
+- ✅ Formatação brasileira de datas/horas
+- ✅ Docker Compose completo
 
----
+## 🏗️ Arquitetura & Pipeline de Dados
 
-## Desenvolvimento
+Python Collector: coleta a cada ${WEATHER_INTERVAL_MINUTES}min → RabbitMQ
 
-- Para alterar a frequência de coleta, modifique `WEATHER_INTERVAL_MINUTES` no `.env`.
-- Variáveis no `.env` são strings e devem ser convertidas em número dentro do código.
-- Timestamp das leituras é convertido para ISO 8601 no frontend para garantir uniformidade.
-- A paginação do histórico está implementada no React, mostrando 10 registros por página.
+Go Worker: consome fila → valida → POST para NestJS
 
----
+NestJS Backend: salva MongoDB → gera insights → API REST
 
-## Logs e Debug
+React Frontend: polling 30s → gráficos + tabela paginada + CRUD usuários
 
-- Use `docker logs -f <container>` para ver logs de collector, worker ou backend.
-- Para testar APIs manualmente, utilize ferramentas como Postman ou Insomnia.
-- Recomenda-se monitorar a fila RabbitMQ via painel em `http://localhost:15672`.
+## 🎥 Vídeo Demonstrativo
 
----
+[Vídeo Explicativo](https://youtu.be/Mb-Uq7jE39g)
 
-## Licença
+## 🔧 Desenvolvimento Individual
+### É possível rodar localmente, mas é preciso saber se faz necessário a configuração do rabbitmq localmente, por isso é recomendado o uso do Docker.
 
-Projeto aberto sob licença MIT.
+### Python Collector
+```
+cd python-collector
+pip install -r requirements.txt
+python collector.py
+```
+### Go Worker
+```
+cd worker-go
+go mod tidy
+go run main.go
+```
 
----
+### NestJS Backend
+```
+cd backend
+npm install
+npm run start:dev
+```
+### React Frontend
+```
+cd frontend
+npm install
+npm run dev
+```
+## 🤖 Insights IA Automatizados
 
-## Contato
+Backend gera alertas baseados em thresholds:
 
-Para dúvidas, basta entrar em contato.
+| Severidade | Condições |
+|------------|-----------|
+| **Info** | Condições normais |
+| **Warning** | Temp > 30°C, Umidade < 40%, Vento > 30km/h |
+| **Danger** | Temp > 35°C, Umidade < 30%, Vento > 50km/h |
 
-## Vídeo de Apresentação
+## 👥 Gerenciamento de Usuários
 
----
+- **Página dedicada**: `/users` acessível pelo botão no header do dashboard
+- **CRUD completo**: Criar, Editar, Excluir usuários
+- **Campos**: Nome, Email, Senha (somente criação), Cargo (User/Admin), Status (Ativo/Inativo)
+- **Interface**: Tabela responsiva + modal moderno
+- **Validações**: Frontend + Backend (JWT protegido)
 
-https://youtu.be/5562pS3IU88
+## 🔍 Debug & Logs
+
+Logs de todos os serviços
+docker-compose logs -f
+
+Logs específicos
+docker-compose logs -f collector
+docker-compose logs -f worker-go
+docker-compose logs -f backend
+docker-compose logs -f frontend
+
+## ✨ Decisões Técnicas
+
+- **RabbitMQ**: Mensageria assíncrona + tolerância a falhas
+- **Go Worker**: Máxima performance no processamento
+- **NestJS**: TypeScript + decorators + validação automática
+- **Recharts**: Gráficos leves e customizáveis (LineChart + PieChart)
+- **Docker Compose**: Ambiente 100% reproduzível
+- **Formatação BR**: `toLocaleDateString('pt-BR')` centralizada
+- **Design System**: TailwindCSS + Lucide React consistente
+
+## 📈 Dashboard Features
+
+- Leituras atuais em tempo real
+- Tabela histórica paginada (10 itens/página)
+- Exportação CSV/XLSX
+- Logout seguro
+
+## 📞 Contato
+
+- Quaisquer dúvidas, basta entrar em contato.
+
+  
