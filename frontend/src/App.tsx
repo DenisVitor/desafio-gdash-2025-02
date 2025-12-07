@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { useState, useEffect, createContext } from "react";
 import Dashboard from "./components/Dashboard";
 import Login from "./components/Login";
+import Users from "./components/Users";
 
 interface User {
   token: string;
@@ -52,6 +53,7 @@ function App() {
               path="/"
               element={user ? <Dashboard /> : <Navigate to="/login" />}
             />
+            <Route path="/users" element={ user ? <Users /> : <Navigate to="/login" />} />
             <Route path="*" element={<Navigate to={user ? "/" : "/login"} />} />
           </Routes>
         </div>

@@ -1,6 +1,14 @@
 import { useState, useEffect, useContext } from "react";
 import { UserContext } from "../App";
-import { LogOut, Download, Sun, CloudRain, Wind, Droplets } from "lucide-react";
+import {
+  LogOut,
+  Download,
+  Sun,
+  CloudRain,
+  Wind,
+  Droplets,
+  User,
+} from "lucide-react";
 import axios from "axios";
 import {
   LineChart,
@@ -116,6 +124,14 @@ export default function Dashboard() {
           </div>
 
           <div className="flex items-center space-x-4">
+            <a
+              href="/users"
+              className="flex items-center space-x-2 px-4 py-2 bg-purple-500 text-white rounded-xl hover:bg-purple-600 transition-colors text-sm font-medium"
+            >
+              <User className="w-4 h-4" />
+              <span>Gerenciar Usuários</span>
+            </a>
+
             <button
               onClick={() => handleExport("csv")}
               className="flex items-center space-x-2 px-4 py-2 bg-green-500 text-white rounded-xl hover:bg-green-600 transition-colors text-sm font-medium"
@@ -235,7 +251,6 @@ export default function Dashboard() {
                 <CartesianGrid strokeDasharray="3 3" vertical={false} />
                 <XAxis
                   dataKey="createdAt"
-                
                   tick={{ fontSize: 10 }}
                   interval={0}
                   angle={-45}
