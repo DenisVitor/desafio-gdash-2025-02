@@ -67,13 +67,13 @@ Senha: 123456
 
 ### 🔗 Endpoints API Importantes
 
-GET /api/weather/logs → Histórico de leituras (paginado)
-GET /api/weather/current → Leitura atual em tempo real
-POST /api/auth/login → Autenticação JWT
-GET /users → Lista todos os usuários
-POST /users → Cria novo usuário
-PUT /users/:id → Edita usuário
-DELETE /users/:id → Exclui usuário
+- GET /api/weather/logs → Histórico de leituras (paginado)
+- GET /api/weather/current → Leitura atual em tempo real
+- POST /api/auth/login → Autenticação JWT
+- GET /users → Lista todos os usuários
+- POST /users → Cria novo usuário
+- PUT /users/:id → Edita usuário
+- DELETE /users/:id → Exclui usuário
 
 ## 🏗️ Arquitetura & Pipeline de Dados
 
