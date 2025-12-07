@@ -1,4 +1,4 @@
-# GDASH Weather Dashboard - Desafio Técnico Completo
+# GDASH Weather Dashboard - Desafio Técnico
 
 ## 🚀 Visão Geral
 
@@ -33,8 +33,9 @@ docker-compose up --build
 
 ## 👤 Usuário Padrão
 
-Email: user@example.com
-Senha: password123
+O usuário já está definido direto no login, mas caso haja a necessidade:
+Email: admin@example.com
+Senha: 123456
 
 ## 📱 Funcionalidades
 
@@ -47,11 +48,32 @@ Senha: password123
 - ✅ Dashboard React responsivo com:
   - Gráficos de tendência (Recharts)
   - Tabela paginada (10 itens/página)
-  - Cards de insights coloridos
   - Export CSV/XLSX
   - Botão "Gerenciar Usuários" no header
 - ✅ Formatação brasileira de datas/horas
 - ✅ Docker Compose completo
+
+## 🌍 URLs Principais da Aplicação
+
+| Serviço                  | URL                                   | Credenciais / Observações                  |
+|--------------------------|---------------------------------------|--------------------------------------------|
+| **Dashboard Principal**  | http://localhost:3000                 | user@example.com / password123             |
+| **Gerenciar Usuários**   | http://localhost:3000/users           | Requer login JWT (Admin recomendado)       |
+| **API Backend Completa** | http://localhost:3001/api             | JWT Bearer Token no header Authorization   |
+| **Weather Logs**         | http://localhost:3001/api/weather/logs| JWT Bearer Token                           |
+| **Login API**            | http://localhost:3001/api/auth/login  | POST {email, password}                     |
+| **RabbitMQ Management**  | http://localhost:15672                | guest / guest                              |
+| **MongoDB**              | mongodb://localhost:27017/weatherdb   | Acesso direto via MongoDB Compass          |
+
+### 🔗 Endpoints API Importantes
+
+GET /api/weather/logs → Histórico de leituras (paginado)
+GET /api/weather/current → Leitura atual em tempo real
+POST /api/auth/login → Autenticação JWT
+GET /users → Lista todos os usuários
+POST /users → Cria novo usuário
+PUT /users/:id → Edita usuário
+DELETE /users/:id → Exclui usuário
 
 ## 🏗️ Arquitetura & Pipeline de Dados
 
